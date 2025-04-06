@@ -1,3 +1,5 @@
+using peackplan.Entities;
+
 namespace peackplan.Dtos;
 
 public class UserCreateParams
@@ -34,5 +36,7 @@ public required string Password { get; set; }
 public DateTime? Birthday { get; set; }
 public bool IsMarried { get; set; } 
 public int? Age { get; set; }
+
+public List<TeamWorkEntity>? TeamWorks { get; set; }
 
 }

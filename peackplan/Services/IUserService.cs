@@ -12,11 +12,13 @@ public interface IUserService
     Task<UserResponse?> GetUserById(Guid id);
     Task<UserResponse?> UpdateUser(UserUpdateParams param);
     Task DeleteUser(Guid id);
-    
+
+    Task<UserResponse?> Profile();
+
 }
 
 
-public class UserService(AppDbContext dbContext ) : IUserService
+public class UserService(AppDbContext dbContext,IHttpContextAccessor httpContext): IUserService
 {
     public async Task<UserResponse> CreateUser(UserCreateParams user)
     {
@@ -62,7 +64,8 @@ public class UserService(AppDbContext dbContext ) : IUserService
           Email = x.Email,
           Birthday = x.Birthday,
           IsMarried = x.IsMarried,
-          Age = 7
+          Age = 7,
+          TeamWorks = x.TeamWorks
       }).ToListAsync();
       return list;
     }
@@ -125,5 +128,18 @@ public class UserService(AppDbContext dbContext ) : IUserService
            await dbContext.SaveChangesAsync();
         } 
      
+    }
+
+    public async Task<UserResponse?>? Profile()
+    {
+        string? userId=httpContext.HttpContext.User.Identity.Name;
+        if (userId!=null)
+        {
+            return null;
+        }
+        UserResponse? userResponse=await GetUserById(Guid.Parse(userId));
+        if (userResponse == null) 
+            return null;
+        return userResponse;
     }
 }

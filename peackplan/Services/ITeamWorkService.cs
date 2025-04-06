@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using peackplan.Entities;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using peackplan.Dtos;
 
 namespace peackplan.Services;
 
 public interface ITeamWorkService
 {
-    Task<TeamWorkEntity> CreateTeamWork(TeamWorkEntity teamWork);
+    Task<TeamWorkEntity> CreateTeamWork(TeamWorkCreateDto param);
     Task<TeamWorkEntity?> UpdateTeamWork(TeamWorkEntity teamWork);
     Task DeleteTeamWork(Guid teamWorkId);
     Task<List<TeamWorkEntity>> GetAllTeamWorks();
@@ -14,9 +15,22 @@ public interface ITeamWorkService
 
 public class TeamWorkService(AppDbContext dbContext) : ITeamWorkService
 {
-    public async Task<TeamWorkEntity> CreateTeamWork(TeamWorkEntity teamWork)
+    public async Task<TeamWorkEntity> CreateTeamWork(TeamWorkCreateDto param)
     {
-        EntityEntry<TeamWorkEntity> entity = dbContext.TeamWorks.Add(teamWork);
+        List<UserEntity> userList = [];
+        foreach (Guid userId in param.Users)
+        {
+          UserEntity? user=await  dbContext.Users.FindAsync(userId);
+          userList.Add(user);
+        }
+        TeamWorkEntity teamwork = new()
+        {
+            Id = Guid.NewGuid(),
+            Title=param.Title,
+            Users = userList
+            
+        };
+        EntityEntry<TeamWorkEntity> entity = dbContext.TeamWorks.Add(teamwork);
         await dbContext.SaveChangesAsync();
 
         return entity.Entity;
@@ -48,7 +62,8 @@ public class TeamWorkService(AppDbContext dbContext) : ITeamWorkService
 
     public async Task<List<TeamWorkEntity>> GetAllTeamWorks()
     {
-        List<TeamWorkEntity> list = await dbContext.TeamWorks.ToListAsync();
+      //  List<TeamWorkEntity> list = await dbContext.TeamWorks.ToListAsync();
+        List<TeamWorkEntity> list = await dbContext.TeamWorks.Include(x=>x.Company).Include(x=>x.Users).ToListAsync();
         return list;
     }
 }

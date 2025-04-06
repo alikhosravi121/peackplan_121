@@ -21,6 +21,6 @@ public class UserEntity
     public DateTime? Birthday { get; set; }
     public bool IsMarried { get; set; } = false;
     
-    public IEnumerable<TeamWorkEntity>? TeamWorks { get; set; }
+    public List<TeamWorkEntity>? TeamWorks { get; set; }
 
 }

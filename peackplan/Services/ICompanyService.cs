@@ -44,7 +44,7 @@ public class CompanyService(AppDbContext dbContext) : ICompanyService
     } 
     public async Task<List<CompanyEntity>> GetCompanies()
     {
-        List<CompanyEntity> list = await dbContext.Companies.ToListAsync();
+        List<CompanyEntity> list = await dbContext.Companies.Include(x=>x.TeamWorks).ToListAsync();
         return list;
     }
 }
