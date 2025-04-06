@@ -94,5 +94,29 @@ app.MapPost("teamwork/Update",async (ITeamWorkService teamWorkService,TeamWorkEn
  return Results.Ok(result);
 });
 
+app.MapPost("company/create",async (ICompanyService companyService, CompanyEntity companyEntity) =>
+{
+ CompanyEntity result=await companyService.CreateCompany(companyEntity);
+ return Results.Ok(result);
+});
+app.MapGet("company/Read",async ( ICompanyService companyService) =>
+{
+ IEnumerable<CompanyEntity> result=await companyService.GetCompanies();
+ return Results.Ok(result);
+});
+app.MapDelete("company/Delete{id:guid}",async (ICompanyService companyService,Guid id) =>
+{
+ await companyService.DeleteCompany(id); 
+ return Results.Ok();
+});
 
+app.MapPost("company/Update",async (ICompanyService companyService,CompanyEntity param) =>
+{
+ CompanyEntity? result=await companyService.UpdateCompany(param);
+ if (result == null)
+ {
+  return Results.NotFound();
+ }
+ return Results.Ok(result);
+});
 app.Run();
