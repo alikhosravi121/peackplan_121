@@ -7,15 +7,15 @@ namespace peackplan.Services;
 
 public interface ITeamWorkService
 {
-    Task<TeamWorkEntity> CreateTeamWork(TeamWorkCreateDto param);
-    Task<TeamWorkEntity?> UpdateTeamWork(TeamWorkEntity teamWork);
+    Task<BaseResponse<TeamWorkEntity>> CreateTeamWork(TeamWorkCreateDto param);
+    Task<BaseResponse<TeamWorkEntity?>> UpdateTeamWork(TeamWorkEntity teamWork);
     Task DeleteTeamWork(Guid teamWorkId);
-    Task<List<TeamWorkEntity>> GetAllTeamWorks();
+    Task<BaseResponse<List<TeamWorkEntity>>> GetAllTeamWorks();
 }
 
 public class TeamWorkService(AppDbContext dbContext) : ITeamWorkService
 {
-    public async Task<TeamWorkEntity> CreateTeamWork(TeamWorkCreateDto param)
+    public async Task<BaseResponse<TeamWorkEntity>> CreateTeamWork(TeamWorkCreateDto param)
     {
         List<UserEntity> userList = [];
         foreach (Guid userId in param.Users)
@@ -33,19 +33,18 @@ public class TeamWorkService(AppDbContext dbContext) : ITeamWorkService
         EntityEntry<TeamWorkEntity> entity = dbContext.TeamWorks.Add(teamwork);
         await dbContext.SaveChangesAsync();
 
-        return entity.Entity;
-       
+        return new BaseResponse<TeamWorkEntity>(result:entity.Entity, status: 200, message: "Success");
     }
 
-    public async Task<TeamWorkEntity?> UpdateTeamWork(TeamWorkEntity param)
+    public async Task<BaseResponse<TeamWorkEntity?>> UpdateTeamWork(TeamWorkEntity param)
     {
         TeamWorkEntity? team=await dbContext.TeamWorks.FindAsync(param.Id);
-        if (team == null) return null;
+        if (team == null) return new BaseResponse<TeamWorkEntity?>(result: null, status: 404, message: "Not Found");
         if(param.Title!=null)team.Title=param.Title;
         if (param.CompanyId!=null)team.CompanyId=param.CompanyId;
         dbContext.TeamWorks.Update(team);
         await dbContext.SaveChangesAsync();
-        return team;
+        return new BaseResponse<TeamWorkEntity?>(result: team, status: 200, message: "Success");
     }
 
     public async Task DeleteTeamWork(Guid teamWorkId)
@@ -60,10 +59,11 @@ public class TeamWorkService(AppDbContext dbContext) : ITeamWorkService
 
    
 
-    public async Task<List<TeamWorkEntity>> GetAllTeamWorks()
+    public async Task<BaseResponse<List<TeamWorkEntity>>> GetAllTeamWorks()
     {
       //  List<TeamWorkEntity> list = await dbContext.TeamWorks.ToListAsync();
         List<TeamWorkEntity> list = await dbContext.TeamWorks.Include(x=>x.Company).Include(x=>x.Users).ToListAsync();
-        return list;
+        
+        return new BaseResponse<List<TeamWorkEntity>>(result: list, status: 200, message: "Success");
     }
 }

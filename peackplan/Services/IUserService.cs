@@ -7,20 +7,20 @@ namespace peackplan.Services;
 
 public interface IUserService
 {
-    Task<UserResponse> CreateUser(UserCreateParams user);
-    Task<IEnumerable<UserResponse>> GetAllUsers();
-    Task<UserResponse?> GetUserById(Guid id);
-    Task<UserResponse?> UpdateUser(UserUpdateParams param);
+    Task <BaseResponse<UserResponse?>> CreateUser(UserCreateParams user);
+    Task <BaseResponse<IEnumerable<UserResponse?>>> GetAllUsers();
+    Task<BaseResponse<UserResponse?>> GetUserById(Guid id);
+    Task<BaseResponse<UserResponse?>> UpdateUser(UserUpdateParams param);
     Task DeleteUser(Guid id);
 
-    Task<UserResponse?> Profile();
+    Task<BaseResponse<UserResponse?>> Profile();
 
 }
 
 
 public class UserService(AppDbContext dbContext,IHttpContextAccessor httpContext): IUserService
 {
-    public async Task<UserResponse> CreateUser(UserCreateParams user)
+    public async Task<BaseResponse<UserResponse?>> CreateUser(UserCreateParams user)
     {
         UserEntity userEntity = new ()
         {
@@ -40,7 +40,7 @@ public class UserService(AppDbContext dbContext,IHttpContextAccessor httpContext
             age =DateTime.UtcNow.Year- user.Birthday.Value.Year;
             
         }
-        return new UserResponse
+        var response= new UserResponse
         {
             UserId = userEntity.Id,
             Fullname = userEntity.Fullname,
@@ -51,9 +51,10 @@ public class UserService(AppDbContext dbContext,IHttpContextAccessor httpContext
             IsMarried = userEntity.IsMarried,
             Age =   age
         };
+        return new BaseResponse<UserResponse?>(result: response, status: 200, message: "Success");
     }
 
-    public async Task<IEnumerable<UserResponse>> GetAllUsers()
+    public async Task <BaseResponse<IEnumerable<UserResponse?>>> GetAllUsers()
     {
       List<UserResponse>list=await dbContext.Users.Select(x=>new UserResponse
       {
@@ -67,15 +68,16 @@ public class UserService(AppDbContext dbContext,IHttpContextAccessor httpContext
           Age = 7,
           TeamWorks = x.TeamWorks
       }).ToListAsync();
-      return list;
+      
+      return new BaseResponse<IEnumerable<UserResponse?>>(result: list, status: 200, message: "Success");
     }
 
-    public async Task<UserResponse?> GetUserById(Guid id)
+    public async Task<BaseResponse<UserResponse?>> GetUserById(Guid id)
     {
         UserEntity? user=await dbContext.Users.FindAsync(id);
         if (user == null)
         {
-            return null;
+            return new BaseResponse<UserResponse?>(result: null, status: 404, message: "User not found");
         }
 
         UserResponse response = new()
@@ -90,13 +92,13 @@ public class UserService(AppDbContext dbContext,IHttpContextAccessor httpContext
             Age = 7,
 
         };
-        return response;
+        return new BaseResponse<UserResponse?>(result: response, status: 200, message: "Success");
     }
 
-    public async Task<UserResponse?> UpdateUser(UserUpdateParams param)
+    public async Task<BaseResponse<UserResponse?>> UpdateUser(UserUpdateParams param)
     {
         UserEntity? user=await dbContext.Users.FindAsync(param.UserId);
-        if (user == null) return null;
+        if (user == null)return new BaseResponse<UserResponse?>(result: null, status: 404, message: "User not found");
         if(param.Fullname!=null) user.Fullname = param.Fullname;
         if(param.Password!=null)user.Password = param.Password;
         if(param.PhoneNumber!=null)user.PhoneNumber = param.PhoneNumber;
@@ -106,7 +108,7 @@ public class UserService(AppDbContext dbContext,IHttpContextAccessor httpContext
         
         dbContext.Users.Update(user);
         await dbContext.SaveChangesAsync();
-        return new UserResponse
+        var response= new UserResponse
         {
             UserId = user.Id,
             Fullname = user.Fullname,
@@ -117,6 +119,7 @@ public class UserService(AppDbContext dbContext,IHttpContextAccessor httpContext
             IsMarried = user.IsMarried,
             Age = 7
         };
+        return new BaseResponse<UserResponse?>(result: response, status: 200, message: "Success");
     }
 
     public async Task DeleteUser(Guid id)
@@ -130,16 +133,16 @@ public class UserService(AppDbContext dbContext,IHttpContextAccessor httpContext
      
     }
 
-    public async Task<UserResponse?>? Profile()
+    public async Task<BaseResponse<UserResponse?>>? Profile()
     {
         string? userId=httpContext.HttpContext.User.Identity.Name;
         if (userId!=null)
         {
-            return null;
+            return new BaseResponse<UserResponse?>(result: null, status: 404, message: "User not found");
         }
-        UserResponse? userResponse=await GetUserById(Guid.Parse(userId));
-        if (userResponse == null) 
-            return null;
-        return userResponse;
+        BaseResponse<UserResponse?> userResponse=await GetUserById(Guid.Parse(userId));
+        if (userResponse == null)return new BaseResponse<UserResponse?>(result: null, status: 404, message: "User not found");
+       
+        return new BaseResponse<UserResponse?>(result: userResponse.Results, status: 200, message: "Success");
     }
 }

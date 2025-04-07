@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using peackplan;
 using peackplan.Dtos;
 using peackplan.Entities;
+using peackplan.Routes;
 using peackplan.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,8 @@ options.SerializerOptions.ReferenceHandler=ReferenceHandler.IgnoreCycles;
 options.SerializerOptions.DefaultIgnoreCondition=JsonIgnoreCondition.WhenWritingNull;
 options.SerializerOptions.WriteIndented = false;
  });
+
+
 // ✅ سرویس‌های Swagger رو اینجا اضافه کن
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -100,119 +103,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
- app.MapPost("user/create",async (IUserService userService, UserCreateParams dto) =>
- {
-UserResponse result=await userService.CreateUser(dto);
-return Results.Ok(result);
- });
-app.MapGet("user/Read",async (IUserService userService) =>
- {
-IEnumerable<UserResponse> result=await userService.GetAllUsers();
-return Results.Ok(result);
- });
-app.MapGet("user/Read/{id:guid}",async (IUserService userService,Guid id) =>
- {
-UserResponse? result=await userService.GetUserById(id);
-if (result == null)
-{
- return Results.NotFound();
-}
-return Results.Ok(result);
- });
-app.MapPost("user/Update",async (IUserService userService,UserUpdateParams param) =>
- {
-UserResponse? result=await userService.UpdateUser(param);
-if (result == null)
-{
- return Results.NotFound();
-}
-return Results.Ok(result);
- });
-
-app.MapDelete("user/Delete{id:guid}",async (IUserService userService,Guid id) =>
- {
-await userService.DeleteUser(id); 
-return Results.Ok();
- });
-
-
-
- 
-app.MapPost("teamwork/create",async (ITeamWorkService teamWorkService, TeamWorkCreateDto param) =>
-{
- TeamWorkEntity result=await teamWorkService.CreateTeamWork(param);
- return Results.Ok(result);
-});
-app.MapGet("teamwork/Read",async (ITeamWorkService teamWorkService) =>
-{
- IEnumerable<TeamWorkEntity> result=await teamWorkService.GetAllTeamWorks();
- return Results.Ok(result);
-});
-
-app.MapDelete("teamwork/Delete{id:guid}",async (ITeamWorkService teamWorkService,Guid id) =>
-{
- await teamWorkService.DeleteTeamWork(id); 
- return Results.Ok();
-});
-
-app.MapPost("teamwork/Update",async (ITeamWorkService teamWorkService,TeamWorkEntity param) =>
-{
- TeamWorkEntity? result=await teamWorkService.UpdateTeamWork(param);
- if (result == null)
- {
-  return Results.NotFound();
- }
- return Results.Ok(result);
-});
-
-app.MapPost("company/create",async (ICompanyService companyService, CompanyEntity companyEntity) =>
-{
- CompanyEntity result=await companyService.CreateCompany(companyEntity);
- return Results.Ok(result);
-});
-app.MapGet("company/Read",async ( ICompanyService companyService) =>
-{
- IEnumerable<CompanyEntity> result=await companyService.GetCompanies();
- return Results.Ok(result);
-});
-app.MapDelete("company/Delete{id:guid}",async (ICompanyService companyService,Guid id) =>
-{
- await companyService.DeleteCompany(id); 
- return Results.Ok();
-});
-
-app.MapPost("company/Update",async (ICompanyService companyService,CompanyEntity param) =>
-{
- CompanyEntity? result=await companyService.UpdateCompany(param);
- if (result == null)
- {
-  return Results.NotFound();
- }
- return Results.Ok(result);
-});
-
-app.MapPost("auth/login", async (IAuthService authService, LoginParam param) =>
-{
- LoginResponse? result = await authService.Login(param);
- if (result == null)
- {
-  return Results.Unauthorized();
-
- }
-
- return Results.Ok(result);
-});
-
-app.MapPost("auth/register",async (IAuthService authService, UserCreateParams dto) =>
-{
- UserResponse result=await authService.Register(dto);
- return Results.Ok(result);
-});
-
-app.MapGet("user/getprofile", async (IUserService userService) =>
-{
- UserResponse? result = await userService.Profile();
- return result == null ? Results.Unauthorized() : Results.Ok(result);
-});
- ///.RequireAuthorization();
+app.MapUserRoutes("UserRoutes");
+app.MapCompanyRoutes("CompanyRoutes"); 
+app.MapTeamWorkRouts("TeamWorkRoutes");
+app.MapAuthRouts("AuthRoutes");
 app.Run();

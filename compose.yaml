@@ -1,0 +1,6 @@
+﻿services:
+  peackplan:
+    image: peackplan
+    build:
+      context: .
+      dockerfile: peackplan/Dockerfile
