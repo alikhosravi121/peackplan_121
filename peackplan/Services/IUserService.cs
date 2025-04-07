@@ -74,7 +74,7 @@ public class UserService(AppDbContext dbContext,IHttpContextAccessor httpContext
 
     public async Task<BaseResponse<UserResponse?>> GetUserById(Guid id)
     {
-        UserEntity? user=await dbContext.Users.FindAsync(id);
+        UserEntity? user=await dbContext.Users.FirstOrDefaultAsync(x=>x.Id==id);
         if (user == null)
         {
             return new BaseResponse<UserResponse?>(result: null, status: 404, message: "User not found");
