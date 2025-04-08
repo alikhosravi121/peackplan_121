@@ -17,10 +17,15 @@ public class UserEntity
     [EmailAddress]
     public string  Email { get; set; }
     public required string Password { get; set; }
-    
+     
+   
     public DateTime? Birthday { get; set; }
     public bool IsMarried { get; set; } = false;
-    
+    public string? FileSrc {get;set;}
     public List<TeamWorkEntity>? TeamWorks { get; set; }
+    
+    public Guid? AvatarId { get; set; }
+    public IEnumerable<UploadedFileEntity>? UploadedFile { get; set; }
+    
 
 }

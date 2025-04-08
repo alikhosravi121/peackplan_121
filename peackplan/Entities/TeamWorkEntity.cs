@@ -8,11 +8,19 @@ public class TeamWorkEntity
 {
     [Key]
     public required Guid  Id { get; set; }
-
+    [Required]
+    [MinLength(4)]
+    [MaxLength(100)]
     public required string Title { get; set; }
+    [MaxLength(200)]
+    public  string? Target { get; set; }
+    public required Guid AdminId { get; set; }
     
+    public Guid? AvatarId { get; set; }
     public Guid?  CompanyId { get; set; } 
-    public CompanyEntity? Company { get; set; }
-    
-    public IEnumerable<UserEntity>? Users { get; set; }
+    public Guid?  OwnerTeamWrokId { get; set; } 
+    [MaxLength(300)]
+    public string? FileSrc {get;set;}
+    public CompanyEntity? Company { get; set; } 
+    public IEnumerable<UserEntity>? Users { get; set; } 
 }
