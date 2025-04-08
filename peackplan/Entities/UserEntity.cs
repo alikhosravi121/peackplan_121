@@ -26,6 +26,6 @@ public class UserEntity
     
     public Guid? AvatarId { get; set; }
     public IEnumerable<UploadedFileEntity>? UploadedFile { get; set; }
-    
+    public IEnumerable<OkrEntity>Okrs { get; set; }
 
 }

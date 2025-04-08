@@ -13,5 +13,5 @@ public class NoteEntity
     public required DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public virtual List<NoteReceiverEntity> Receivers { get; set; } = new List<NoteReceiverEntity>();
-
+    public required OkrEntity OkrEntity { get; set; } 
 }

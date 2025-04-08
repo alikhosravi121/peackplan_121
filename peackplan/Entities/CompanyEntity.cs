@@ -12,4 +12,6 @@ public class CompanyEntity
     
     public IEnumerable<TeamWorkEntity>? TeamWorks { get; set; }
     
+    public IEnumerable<TagEntity>? TagEntities { get; set; }
+    
 }

@@ -16,7 +16,6 @@ public class OkrEntity
 
     [Required]
     public AccessLevelEnum AccessLevel { get; set; }
-
     [Required]
     public OkrStatusEnum Status { get; set; }
 
@@ -35,5 +34,8 @@ public class OkrEntity
     public Guid? AvatarId { get; set; }
     [Required]
     public Guid ManagerId { get; set; }
-    
+    public IEnumerable<UserEntity>? Users { get; set; }
+    public IEnumerable<UploadedFileEntity>? UploadedFile { get; set; }
+    public IEnumerable<NoteEntity>? NoteEntities { get; set; }
+    public IEnumerable<PrimaryTaskEntity>? PrimaryTasks { get; set; }
 }

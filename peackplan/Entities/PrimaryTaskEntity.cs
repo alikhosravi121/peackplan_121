@@ -19,14 +19,12 @@ public class PrimaryTaskEntity
 
     public Guid? ParentTaskId { get; set; }
     
+    public Guid? AvatarId { get; set; }
 
     public DateTime? DueDate { get; set; }
 
     public string? Tags { get; set; } // کاما جدا یا json string
 
     [Required]
-    public Guid ManagerId { get; set; }
-   
-
-    
+    public Guid ManagerId { get; set; } 
 }

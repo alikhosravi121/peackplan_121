@@ -19,5 +19,8 @@ public class UploadedFileEntity
 
     public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
     
-    public UserEntity? Users { get; set; } 
+    public UserEntity? Users { get; set; }
+    public required Guid? UserId { get; set; }
+    public  OkrEntity Okr { get; set; }
+    public required Guid? OkrId { get; set; }
 }
