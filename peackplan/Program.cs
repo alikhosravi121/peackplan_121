@@ -73,6 +73,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITeamWorkService, TeamWorkService>(); 
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IPrimaryTaskService,PrimaryTaskService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(options =>
 {
@@ -112,4 +113,5 @@ app.MapUserRoutes("UserRoutes");
 app.MapCompanyRoutes("CompanyRoutes"); 
 app.MapTeamWorkRouts("TeamWorkRoutes");
 app.MapAuthRouts("AuthRoutes");
+app.MapPrimaryTask("PrimaryTask");
 app.Run();

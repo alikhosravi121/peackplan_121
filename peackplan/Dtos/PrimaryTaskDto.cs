@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using peackplan.Entities;
 using peackplan.Enums;
 
-namespace peackplan.Entities;
+namespace peackplan.Dtos;
 
-public class PrimaryTaskEntity
+public class PrimaryTaskCreate
 {
     [Key]
     public Guid Id { get; set; }
@@ -27,7 +28,5 @@ public class PrimaryTaskEntity
     public string? Tags { get; set; } // کاما جدا یا json string
 
     [Required]
-    public Guid ManagerId { get; set; } 
-    
-    public UserEntity? Manager { get; set; }
+    public Guid ManagerId { get; set; }  
 }

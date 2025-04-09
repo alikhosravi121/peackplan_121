@@ -14,7 +14,8 @@ public class TeamWorkEntity
     public required string Title { get; set; }
     [MaxLength(200)]
     public  string? Target { get; set; }
-    public required Guid AdminId { get; set; }
+    [Required]
+    public  Guid AdminId { get; set; }
     
     public Guid? AvatarId { get; set; }
     public Guid?  CompanyId { get; set; } 

@@ -12,4 +12,6 @@ public class AppDbContext(DbContextOptions options):DbContext(options)
     public DbSet<TeamWorkEntity> TeamWorks { get; set; } = null!;
     public DbSet<CompanyEntity> Companies { get; set; } = null!;
     
+    public DbSet<PrimaryTaskEntity> PrimaryTasks { get; set; } = null!;
+    
 }

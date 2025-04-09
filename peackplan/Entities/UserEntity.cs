@@ -25,6 +25,7 @@ public class UserEntity
     public List<TeamWorkEntity>? TeamWorks { get; set; }
     
     public Guid? AvatarId { get; set; }
+    public List<PrimaryTaskEntity>? PrimaryTasks { get; set; }
     public IEnumerable<UploadedFileEntity>? UploadedFile { get; set; }
     public IEnumerable<OkrEntity>Okrs { get; set; }
 
