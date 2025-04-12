@@ -30,3 +30,26 @@ public class PrimaryTaskCreate
     [Required]
     public Guid ManagerId { get; set; }  
 }
+
+public class PrimaryTaskResponse{ 
+    public Guid Id { get; set; }
+ 
+    public string Title { get; set; } = default!;
+
+    public string? Description { get; set; }
+     
+    public OkrStatusEnum Status { get; set; }
+    
+    public AccessLevelEnum AccessLevel { get; set; }  // enum تعریف‌شده برای دسترسی‌ها
+
+    public Guid? ParentTaskId { get; set; }
+    
+    public Guid? AvatarId { get; set; }
+
+    public DateTime? DueDate { get; set; } 
+    public string? Tags { get; set; }
+    public string? NameManager { get; set; } 
+    public string? AvatarManager{get;set;} 
+    public Guid ManagerId { get; set; }  
+
+}
