@@ -9,6 +9,7 @@ public static class Company
     public static void MapCompanyRoutes(this IEndpointRouteBuilder app, string tag)
     {
         var route = app.MapGroup("api/v1/company/");
+        
         route.MapPost("create", async (ICompanyService companyService,CompanyCreateParam  companyEntity) =>
         {
            BaseResponse<CompanyEntity> result = await companyService.CreateCompany(companyEntity);

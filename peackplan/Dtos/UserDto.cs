@@ -15,7 +15,8 @@ public class UserCreateParams
     public DateTime? Birthday { get; set; }
     public bool IsMarried { get; set; } = false;
 
-}public class UserUpdateParams
+}
+public class UserUpdateParams
 {
      
      public required Guid UserId { get; set; }

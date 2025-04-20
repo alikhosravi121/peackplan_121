@@ -13,5 +13,7 @@ public class AppDbContext(DbContextOptions options):DbContext(options)
     public DbSet<CompanyEntity> Companies { get; set; } = null!;
     
     public DbSet<PrimaryTaskEntity> PrimaryTasks { get; set; } = null!;
+
+    public DbSet<OkrEntity> Okrs { get; set; } = null!;
     
 }

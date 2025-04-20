@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using peackplan.Enums;
 
 namespace peackplan.Entities;
-
+[Table("Okrs")]
 public class OkrEntity
 {
     [Key]

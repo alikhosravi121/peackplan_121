@@ -1,8 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using peackplan.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace peackplan.Entities;
 
+[Table("PrimaryTasks")]
 public class PrimaryTaskEntity
 {
     [Key]

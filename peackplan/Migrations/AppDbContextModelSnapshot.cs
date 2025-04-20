@@ -90,7 +90,7 @@ namespace peackplan.Migrations
 
                     b.HasIndex("OkrEntityId");
 
-                    b.ToTable("NoteEntity");
+                    b.ToTable("Notes");
                 });
 
             modelBuilder.Entity("peackplan.Entities.NoteReceiverEntity", b =>
@@ -168,7 +168,7 @@ namespace peackplan.Migrations
 
                     b.HasIndex("ParentOkrId");
 
-                    b.ToTable("OkrEntity");
+                    b.ToTable("Okrs");
                 });
 
             modelBuilder.Entity("peackplan.Entities.PrimaryTaskEntity", b =>
